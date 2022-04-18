@@ -1,9 +1,9 @@
-DEV_DB='sqlite:///market.db'
+DEV_DB = "sqlite:///market.db"
 
-pg_user='admin'
-pg_password='admin'
-pg_db='market'
-pg_host='localhost'
-pg_port=5432
+pg_user = "admin"
+pg_password = "admin"
+pg_db = "market"
+pg_host = "localhost"
+pg_port = 5432
 
-PROD_DB = f'postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}'
+PROD_DB = f"postgresql://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"

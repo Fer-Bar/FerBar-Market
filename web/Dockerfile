@@ -5,4 +5,6 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install -r requirements.txt
 COPY . /code/
-CMD python run.py
+# Run this command for the development server ans set DEBUG=0
+# CMD python run.py
+CMD gunicorn --bind 0.0.0.0:6060 -w 3 run:app

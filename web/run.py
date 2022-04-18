@@ -10,4 +10,4 @@ load_dotenv()
 # Checks if the run.py file has executed directly and not imported
 if __name__ == "__main__":
 
-    app.run(host="0.0.0.0", port=6060, debug=os.environ.get("DEBUG") == "1")
+    app.run(host="0.0.0.0", port=6060, debug=os.environ.get("DEBUG", 1))

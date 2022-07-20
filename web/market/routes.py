@@ -12,12 +12,37 @@ from market.models.user import User
 def home_page():
     return render_template("home.html")
 
+@app.route("/myitems", methods=["GET","POST"])
+def myitems_page():
+    selling_form = SellItemForm()
+    if request.method == "POST":    
+        sold_item = request.form.get("sold_item")
+        s_item_object = Item.query.filter_by(name=sold_item).first()
+        if s_item_object:
+                if current_user.can_sell(s_item_object):
+                    s_item_object.sell(current_user)
+                    flash(
+                        f"Congratulations! You sold: {s_item_object.name} back to market!",
+                        category="success",
+                    )
+                else:
+                    flash(
+                        f"Something went wrong with selling:  {s_item_object.name}",
+                        category="danger",
+                    )
 
+        return redirect(url_for("market_page"))
+    if request.method == "GET":
+        owned_items = Item.query.filter_by(owner=current_user.id)
+        return render_template(
+            "myitems.html",
+            selling_form=selling_form,
+            owned_items=owned_items,
+        )
 @app.route("/market", methods=["GET", "POST"])
 @login_required
 def market_page():
     purchase_form = PurchaseItemForm()
-    selling_form = SellItemForm()
     if request.method == "POST":
         # Purchase Item Logic
         purchased_item = request.form.get("purchased_item")
@@ -34,34 +59,14 @@ def market_page():
                     f"Unfortunately! You don't have enough money to purchase {p_item_object.name}",
                     category="danger",
                 )
-
-        # Sell Item Logic
-        sold_item = request.form.get("sold_item")
-        s_item_object = Item.query.filter_by(name=sold_item).first()
-        if s_item_object:
-            if current_user.can_sell(s_item_object):
-                s_item_object.sell(current_user)
-                flash(
-                    f"Congratulations! You sold: {s_item_object.name} back to market!",
-                    category="success",
-                )
-            else:
-                flash(
-                    f"Something went wrong with selling:  {s_item_object.name}",
-                    category="danger",
-                )
-
         return redirect(url_for("market_page"))
 
     if request.method == "GET":
         items = Item.query.filter_by(owner=None)
-        owned_items = Item.query.filter_by(owner=current_user.id)
         return render_template(
             "market.html",
             items=items,
-            selling_form=selling_form,
-            purchase_form=purchase_form,
-            owned_items=owned_items,
+            purchase_form=purchase_form
         )
 
 

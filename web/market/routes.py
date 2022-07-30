@@ -15,7 +15,7 @@ def home_page():
 @app.route("/myitems", methods=["GET","POST"])
 def myitems_page():
     selling_form = SellItemForm()
-    if request.method == "POST":    
+    if request.method == "POST":
         sold_item = request.form.get("sold_item")
         s_item_object = Item.query.filter_by(name=sold_item).first()
         if s_item_object:

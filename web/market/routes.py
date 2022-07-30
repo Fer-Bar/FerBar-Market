@@ -13,6 +13,7 @@ def home_page():
     return render_template("home.html")
 
 @app.route("/myitems", methods=["GET","POST"])
+@login_required
 def myitems_page():
     selling_form = SellItemForm()
     if request.method == "POST":
